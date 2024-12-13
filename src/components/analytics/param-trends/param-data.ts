@@ -1,0 +1,51 @@
+export const data = [
+  {
+    name: 'M',
+    WaterTemp: 36,
+    Parameter: 5,
+    pH: 4,
+    DissolvedOxygen: 6,
+  },
+  {
+    name: 'T',
+    WaterTemp: 36,
+    Parameter: 4,
+    pH: 7,
+    DissolvedOxygen: 4,
+  },
+  {
+    name: 'W',
+    WaterTemp: 36,
+    Parameter: 5,
+    pH: 5,
+    DissolvedOxygen: 6,
+  },
+  {
+    name: 'TH',
+    WaterTemp: 36,
+    Parameter: 6,
+    pH: 4,
+    DissolvedOxygen: 6,
+  },
+  {
+    name: 'F',
+    WaterTemp: 36,
+    Parameter: 3,
+    pH: 7,
+    DissolvedOxygen: 5,
+  },
+  {
+    name: 'S',
+    WaterTemp: 36,
+    Parameter: 4,
+    pH: 6,
+    DissolvedOxygen: 5,
+  },
+  {
+    name: 'S',
+    WaterTemp: 3,
+    Parameter: 4,
+    pH: 7,
+    DissolvedOxygen: 7,
+  },
+];
