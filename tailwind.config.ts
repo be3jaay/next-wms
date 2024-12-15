@@ -12,8 +12,9 @@ export default {
   		colors: {
   			background: '#161618',
   			gray: '#343333',
-				primary: "#48cae4",
-				slate: "#C1BFBF"
+				primary: "#3AD4FD",
+				slate: "#C1BFBF",
+        red: "#d90429"
   		},
   	}
   },

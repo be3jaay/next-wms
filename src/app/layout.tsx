@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import localFont from "next/font/local";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Loading from "./loading";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,6 +35,7 @@ export default function Layout({
         <React.Fragment>
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={false} />
+            <Suspense fallback={<Loading />} />
             <ClerkProvider
               appearance={{
                 baseTheme: dark,

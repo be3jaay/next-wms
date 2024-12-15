@@ -14,7 +14,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -35,48 +34,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { AnomaliesType } from "@/types/common"
+import { GetAllAnomalousService } from "@/services/parameter"
+import { useQuery } from "@tanstack/react-query"
+import Moment from "react-moment"
+import { LoadingSpinner } from "@/app/loading"
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-]
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<AnomaliesType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -100,47 +64,77 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
+    accessorKey: "id",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          ID
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
+    accessorKey: "type",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Parameter Type
+          <ArrowUpDown />
+        </Button>
+      )
     },
+    cell: ({ row }) => <div className="capitalize">{row.getValue("type")}</div>,
   },
+  {
+    accessorKey: "suggestion",
+    header: "Suggestive Action",
+    cell: ({ row }) => (
+      <div className="">{row.getValue("suggestion")}</div>
+    ),
+  },
+  {
+    accessorKey: "value",
+    header: "Value",
+    cell: ({ row }) => (
+      <div className="">{row.getValue("value")}</div>
+    ),
+  },
+  {
+    accessorKey: "created_at",
+    header: "Date",
+    cell: ({ row }) => (
+      <Moment format="MMMM Do, YYYY hh:mm:ss a ">{row.getValue("created_at")}</Moment>
+    ),
+  },
+  // {
+  //   accessorKey: "suggestion",
+  //   header: () => <div className="text-right">Suggestive Action</div>,
+  //   cell: ({ row }) => {
+  //     const amount = parseFloat(row.getValue("suggestion"))
+
+  //     // Format the amount as a dollar amount
+  //     const formatted = new Intl.NumberFormat("en-US", {
+  //       style: "currency",
+  //       currency: "USD",
+  //     }).format(amount)
+
+  //     return <div className="text-right font-medium">{formatted}</div>
+  //   },
+  // },
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
+    cell: ({ }) => {
+      // const payment = row.original
+      //add row in cell
 
       return (
         <DropdownMenu>
@@ -153,13 +147,11 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy payment ID
+              View Log
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Delete Log</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -167,7 +159,19 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ]
 
+
 export function DataTable() {
+  const {
+    data,
+    isLoading,
+    error
+  } = useQuery<AnomaliesType[]>({
+    queryKey: ['all_anomalies'],
+    queryFn: GetAllAnomalousService.getAnomalous,
+    refetchInterval: 60 * 1000,
+  });
+
+
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -177,7 +181,7 @@ export function DataTable() {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data,
+    data: data || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -195,14 +199,18 @@ export function DataTable() {
     },
   })
 
+  if (isLoading) return <LoadingSpinner />;
+
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter parameter types..."
+          value={(table.getColumn("type")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("type")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

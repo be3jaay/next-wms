@@ -26,8 +26,8 @@ export const PHLevel: React.FC<Props> = ({
 
   if (error) return <p>Error: {error.message}</p>
 
-  const pHLevel = typeof data?.dissolved_oxygen === 'number'
-    ? data.dissolved_oxygen
+  const pHLevel = typeof data?.ph_level === 'number'
+    ? data.ph_level
     : 0.00
 
   const isNormal = pHLevel >= 6.5 && pHLevel <= 8.5
@@ -36,20 +36,20 @@ export const PHLevel: React.FC<Props> = ({
     <React.Fragment>
       <Card className={`${isNormal
         ? ""
-        : "border border-red-500 text-red-500"}`
+        : "border border-red text-red"}`
       }>
         <CardHeader>
           <CardTitle>
             <div className={`${isNormal
               ? ""
-              : " text-red-500"}
+              : " text-red"}
            flex items-center w-full justify-between`
             }>
               <div className="flex items-center gap-2 ">
                 pH Level
                 <p className={`${isNormal
                   ? "text-slate"
-                  : " text-red-500"} 
+                  : " text-red"} 
               text-sm `
                 }>
                   (Optimal range: 6.5 - 8.5)
@@ -65,7 +65,7 @@ export const PHLevel: React.FC<Props> = ({
         <CardFooter>
           <div className={`${isNormal
             ? "text-slate"
-            : " text-red-500"} 
+            : " text-red"} 
           flex items-center justify-between w-full `}
           >
             <p>

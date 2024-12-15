@@ -1,44 +1,37 @@
 "use client"
-import { BellRing } from "lucide-react"
+import { AlertCircle } from "lucide-react"
 import {
   Alert,
   AlertDescription,
+  AlertTitle,
   Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
   SkeletonBox
 } from "@/components/ui"
-import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ParameterType } from "@/types/common"
-import { GetAnomalousService } from "@/services/parameter"
+import { AnomaliesType } from "@/types/common"
+import { GetAllAnomalousService } from "@/services/parameter"
 import { useQuery } from "@tanstack/react-query"
+import Moment from "react-moment"
 
 export const Notifications = () => {
   const router = useRouter();
-  const [showWarning] = useState(false);
   const {
     data,
     isLoading,
     error
-  } = useQuery<ParameterType>({
-    queryKey: ['get_anomalous'],
-    queryFn: GetAnomalousService.getAnomalous,
-    refetchInterval: 15 * 60 * 1000,
+  } = useQuery<AnomaliesType[]>({
+    queryKey: ['show_daily_notification'],
+    queryFn: GetAllAnomalousService.getDailyNotification,
+    refetchInterval: 60 * 1000,
   });
 
   if (isLoading) return <SkeletonBox />
 
   if (error) return <p>Error: {error.message}</p>
-
 
   const redirectToLogs = () => {
     router.push("/view-logs")
@@ -51,7 +44,7 @@ export const Notifications = () => {
       <CardHeader>
         <CardTitle>
           <div className="flex items-center w-full justify-between text-primary">
-            Notifications
+            Daily Notifications
             <Button onClick={redirectToLogs}>
               View All Logs
             </Button>
@@ -59,26 +52,29 @@ export const Notifications = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center py-1 gap-1" >
-          <Alert variant={showWarning ? "destructive" : "default"}>
-            <BellRing className="h-4 w-4 " />
-            <Dialog>
-              <DialogTrigger>{data?.dissolved_oxygen}</DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>All parameters are normal</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete your account
-                    and remove your data from our servers.
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-            <AlertDescription>
-              {data?.created_at}
-            </AlertDescription>
-          </Alert>
-        </div>
+        {data?.map((item) => (
+          <div key={item.id} className="flex items-center py-1 gap-1" >
+            <Alert variant="destructive" className="flex items-start gap-2 flex-col">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                  <span>{item.type}</span>
+                  <span>(  {item.value}  ) </span>
+                </div>
+                <div className="">
+                  <Moment format="MMMM Do, YYYY hh:mm:ss a ">{item.created_at}</Moment>
+                </div>
+              </AlertTitle>
+              <AlertDescription>
+                <div className="">
+                  <p>
+                    {item.suggestion}
+                  </p>
+                </div>
+              </AlertDescription>
+            </Alert>
+          </div>
+        ))}
       </CardContent>
     </Card>
   )

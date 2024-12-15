@@ -32,13 +32,13 @@ export const DissolvedOxygen: React.FC<Props> = ({ data, isLoading, error }) => 
   return (
     <Card className={`${isNormal
       ? ""
-      : "border border-red-500 text-red-500"}`
+      : "border border-red text-red"}`
     }>
       <CardHeader>
         <CardTitle>
           <div className={`${isNormal
             ? ""
-            : " text-red-500"}
+            : " text-red"}
            flex items-center w-full justify-between`
           }>
             <div className='flex items-center gap-2'
@@ -46,7 +46,7 @@ export const DissolvedOxygen: React.FC<Props> = ({ data, isLoading, error }) => 
               Dissolved Oxygen
               <p className={`${isNormal
                 ? "text-slate"
-                : " text-red-500"} 
+                : " text-red"} 
               text-sm `
               }>
                 (Optimal range: 6 - 9 mg/L)
@@ -62,7 +62,7 @@ export const DissolvedOxygen: React.FC<Props> = ({ data, isLoading, error }) => 
       <CardFooter>
         <div className={`${isNormal
           ? "text-slate"
-          : " text-red-500"} 
+          : " text-red"} 
           flex items-center justify-between w-full `}
         >
           <p>

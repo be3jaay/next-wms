@@ -13,3 +13,13 @@ export type ParameterProps = {
   isLoading: boolean;
   error: Error | null;
 }
+
+export type AnomaliesType = {
+  id: number;
+  water_reading: number;
+  type: string;
+  value: Float32Array;
+  suggestion: string;
+  created_at: string;
+  updated_at: string;
+}

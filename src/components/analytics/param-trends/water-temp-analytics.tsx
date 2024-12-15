@@ -4,7 +4,6 @@ import {
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer
@@ -27,6 +26,7 @@ import { ParameterType } from '@/types/common';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ParameterService } from '@/services/parameter';
+import moment from 'moment';
 
 export const WaterTempAnalytics = ({
 }) => {
@@ -34,11 +34,19 @@ export const WaterTempAnalytics = ({
     data,
     isLoading,
     error
-  } = useQuery<ParameterType>({
+  } = useQuery<ParameterType[]>({
     queryKey: ['all_parameters'],
     queryFn: ParameterService.getParameter,
     refetchInterval: 15 * 60 * 1000,
   });
+  // 15 minutes interval
+  // 15 * 60 * 1000,
+
+  const formattedData = data?.map(item => ({
+    ...item,
+    created_at: moment(item.created_at).format('hh:mm:ss')
+  })) || [];
+
 
   if (isLoading) return <SkeletonBox />
 
@@ -70,13 +78,12 @@ export const WaterTempAnalytics = ({
           <LineChart
             width={700}
             height={300}
-            data={Array.isArray(data) ? data : []}
+            data={formattedData}
             margin={{
               top: 5,
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="1 1" />
             <XAxis dataKey='created_at' />
             <YAxis />
             <Tooltip />

@@ -35,20 +35,20 @@ export const WaterTemp: React.FC<Props> = ({
   return (
     <Card className={`${isNormal
       ? ""
-      : "border border-red-500 text-red-500"}`
+      : "border border-red text-red"}`
     }>
       <CardHeader>
         <CardTitle>
           <div className={`${isNormal
             ? ""
-            : " text-red-500"}
+            : " text-red"}
            flex items-center w-full justify-between`
           }>
             <div className="flex items-center gap-2 ">
               Water Temperature
               <p className={`${isNormal
                 ? "text-slate"
-                : " text-red-500"} 
+                : " text-red"} 
               text-sm `
               }>
                 (Optimal range: 22 - 28 °C)
@@ -64,7 +64,7 @@ export const WaterTemp: React.FC<Props> = ({
       <CardFooter>
         <div className={`${isNormal
           ? "text-slate"
-          : " text-red-500"} 
+          : " text-red"} 
           flex items-center justify-between w-full `}
         >
           <p>

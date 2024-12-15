@@ -12,3 +12,4 @@ export * from './dropdown-menu';
 export * from './input';
 export * from './table';
 export * from './tabs';
+export * from './badge';
