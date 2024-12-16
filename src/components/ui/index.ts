@@ -13,3 +13,6 @@ export * from './input';
 export * from './table';
 export * from './tabs';
 export * from './badge';
+export * from './scroll-area';
+export * from './toast';
+export * from './alert-dialog';

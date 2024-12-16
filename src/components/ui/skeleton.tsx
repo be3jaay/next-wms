@@ -27,7 +27,7 @@ export function SkeletonCard() {
 export function SkeletonBox() {
   return (
     <Card className="flex flex-col space-y-3">
-      <Skeleton className="h-[450px] w-full rounded-xl" />
+      <Skeleton className="h-[470px] w-full rounded-xl" />
     </Card>
   )
 }

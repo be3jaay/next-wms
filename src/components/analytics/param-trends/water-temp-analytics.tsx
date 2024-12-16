@@ -23,28 +23,30 @@ import {
   SkeletonBox
 } from "@/components/ui";
 import { ParameterType } from '@/types/common';
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ParameterService } from '@/services/parameter';
+import { ParameterTrendingService } from '@/services/parameter';
 import moment from 'moment';
 
 export const WaterTempAnalytics = ({
 }) => {
+  const [range, setRange] = useState<string>('daily');
+
   const {
     data,
     isLoading,
     error
   } = useQuery<ParameterType[]>({
-    queryKey: ['all_parameters'],
-    queryFn: ParameterService.getParameter,
-    refetchInterval: 15 * 60 * 1000,
+    queryKey: ['parameters', range],
+    queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
+    refetchInterval: 60 * 1000,
   });
   // 15 minutes interval
   // 15 * 60 * 1000,
 
   const formattedData = data?.map(item => ({
     ...item,
-    created_at: moment(item.created_at).format('hh:mm:ss')
+    created_at: moment(item.created_at).format('"MMMM Do, YYYY hh:mm:ss a"')
   })) || [];
 
 
@@ -52,28 +54,52 @@ export const WaterTempAnalytics = ({
 
   if (error) return <p>Error: {error.message}</p>
 
+  const handleRangeChange = (value: string) => {
+    setRange(value);
+  };
+
+  const CustomToolTip = ({ active, payload, label }: {
+    active?: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    payload?: any[],
+    label?: string
+  }) => {
+
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-bg p-4 shadow-md rounded-md">
+          <p>{`Date: ${label}`}</p>
+          <p>{`Water Temperature: ${payload[0].value} °C`}</p>
+        </div>
+      );
+    }
+    return null;
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between w-full">
           Water Temperature
-          <Select>
+          <Select onValueChange={handleRangeChange}>
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="This Day" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Select Preferable Date</SelectLabel>
-                <SelectItem value="apple">This Day</SelectItem>
-                <SelectItem value="banana">This Week</SelectItem>
-                <SelectItem value="blueberry">This Month</SelectItem>
-                <SelectItem value="grapes">This Year</SelectItem>
+                <SelectItem value="daily">This Day</SelectItem>
+                <SelectItem value="weekly">This Week</SelectItem>
+                <SelectItem value="monthly">This Month</SelectItem>
+                <SelectItem value="yearly">This Year</SelectItem>
+                <SelectItem value="all">All</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {formattedData.length === 0 && <p>No data available</p>}
         <ResponsiveContainer width="100%" height={410}>
           <LineChart
             width={700}
@@ -86,9 +112,9 @@ export const WaterTempAnalytics = ({
           >
             <XAxis dataKey='created_at' />
             <YAxis />
-            <Tooltip />
+            <Tooltip content={<CustomToolTip />} />
             <Legend />
-            <Line type="monotone" dataKey="water_temperature" stroke="#48cae4" activeDot={{ r: 8 }} />
+            <Line type="bumpX" dataKey="water_temperature" stroke="#48cae4" activeDot={{ r: 8 }} />
           </LineChart>
         </ResponsiveContainer>
       </CardContent>

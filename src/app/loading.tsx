@@ -12,7 +12,7 @@ export default function Loading() {
 
 export function LoadingSpinner() {
   return (
-    <div className="w-full h-[20rem] flex items-center justify-center">
+    <div className="w-full h-screen flex items-center justify-center">
       <div
         className="w-10 h-10 border-4 border-t-cyan-500 border-gray-300 rounded-full animate-spin"
       ></div>

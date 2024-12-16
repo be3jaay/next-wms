@@ -36,9 +36,21 @@ import {
 } from "@/components/ui/table"
 import { AnomaliesType } from "@/types/common"
 import { GetAllAnomalousService } from "@/services/parameter"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Moment from "react-moment"
 import { LoadingSpinner } from "@/app/loading"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "./alert-dialog"
+import { useToast } from "@/hooks/use-toast"
 
 export const columns: ColumnDef<AnomaliesType>[] = [
   {
@@ -132,10 +144,9 @@ export const columns: ColumnDef<AnomaliesType>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ }) => {
-      // const payment = row.original
+    cell: ({ row }) => {
+      // const action = row.original
       //add row in cell
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -146,12 +157,30 @@ export const columns: ColumnDef<AnomaliesType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem onClick={() => (action.id)}
             >
               View Log
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Delete Log</DropdownMenuItem>
+            <DropdownMenuItem>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  Delete Log
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete all the anomaly logs from the database.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction >Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -161,6 +190,8 @@ export const columns: ColumnDef<AnomaliesType>[] = [
 
 
 export function DataTable() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast()
   const {
     data,
     isLoading,
@@ -171,6 +202,21 @@ export function DataTable() {
     refetchInterval: 60 * 1000,
   });
 
+  const deleteAllAnomaly = useMutation({
+    mutationFn: GetAllAnomalousService.deleteDailyAnomaly,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['all_anomalies'] });
+    },
+  });
+
+  const handleDeleteAll = () => {
+    deleteAllAnomaly.mutate();
+    toast({
+      variant: "default",
+      title: "Successfully Deleted.",
+      description: "Anomaly has been deleted successfully.",
+    })
+  }
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -204,7 +250,28 @@ export function DataTable() {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
+      {table.getIsAllPageRowsSelected() && (
+        <div className="w-full flex items-center justify-end">
+          <AlertDialog>
+            <AlertDialogTrigger className="text-white text-sm bg-red/80 py-2.5 px-6 rounded-md">
+              Delete All
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete all the anomaly logs from the database.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteAll}>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      )}
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter parameter types..."
@@ -216,7 +283,7 @@ export function DataTable() {
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="default" className="ml-auto">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>

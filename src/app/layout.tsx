@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loading from "./loading";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -44,6 +45,7 @@ export default function Layout({
               <div className="w-full h-full">
                 <SignedOut />
                 <SignedIn />
+                <Toaster />
                 {children}
               </div>
             </ClerkProvider>
