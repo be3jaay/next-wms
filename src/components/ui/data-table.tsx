@@ -126,27 +126,40 @@ export const columns: ColumnDef<AnomaliesType>[] = [
       <Moment format="MMMM Do, YYYY hh:mm:ss a ">{row.getValue("created_at")}</Moment>
     ),
   },
-  // {
-  //   accessorKey: "suggestion",
-  //   header: () => <div className="text-right">Suggestive Action</div>,
-  //   cell: ({ row }) => {
-  //     const amount = parseFloat(row.getValue("suggestion"))
-
-  //     // Format the amount as a dollar amount
-  //     const formatted = new Intl.NumberFormat("en-US", {
-  //       style: "currency",
-  //       currency: "USD",
-  //     }).format(amount)
-
-  //     return <div className="text-right font-medium">{formatted}</div>
-  //   },
-  // },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      // const action = row.original
-      //add row in cell
+      const anomaly = row.original;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const queryClient = useQueryClient();
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { toast } = useToast();
+
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const deleteAnomaly = useMutation({
+        mutationFn: (id: number) => GetAllAnomalousService.deleteAnomaly(id),
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["all_anomalies"] });
+          toast({
+            variant: "default",
+            title: "Successfully Deleted",
+            description: `Anomaly with ID ${anomaly.id} has been deleted.`,
+          });
+        },
+        onError: (error) => {
+          toast({
+            variant: "destructive",
+            title: "Error Deleting Anomaly",
+            description: error?.message || "An error occurred.",
+          });
+        },
+      });
+
+      const handleDelete = () => {
+        deleteAnomaly.mutate(anomaly.id);
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -157,35 +170,20 @@ export const columns: ColumnDef<AnomaliesType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem onClick={() => (action.id)}
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(anomaly.type)}
             >
-              View Log
-            </DropdownMenuItem> */}
+              Copy Anomaly Type
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <AlertDialog>
-                <AlertDialogTrigger>
-                  Delete Log
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete all the anomaly logs from the database.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction >Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+            <DropdownMenuItem onClick={handleDelete}>
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
-  },
+  }
 ]
 
 
