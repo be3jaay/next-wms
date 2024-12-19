@@ -114,7 +114,7 @@ export const Notifications = () => {
           </div>
         </CardTitle>
       </CardHeader>
-      <ScrollArea className="h-[30.5rem] w-full ">
+      <ScrollArea className="h-[32.2rem] w-full ">
         <CardContent>
           {data?.map((item) => (
             <div key={item.id} className="flex items-center py-1 gap-1" >

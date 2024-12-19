@@ -65,8 +65,8 @@ export const PhLevelAnalytics = ({
   }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-bg p-4 shadow-md rounded-md">
-          <p>{`Date: ${label}`}</p>
+        <div className="bg-gray p-6 shadow-md rounded-md text-sm">
+          <p>{`Time Stamp: ${label}`}</p>
           <p>{`pH Level: ${payload[0].value}`}</p>
         </div>
       );
@@ -77,7 +77,7 @@ export const PhLevelAnalytics = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between w-full">
+        <CardTitle className="flex items-center justify-between w-full text-[#fb8500]">
           pH Level
           <Select onValueChange={handleRangeChange}>
             <SelectTrigger className="w-[120px]">
@@ -97,6 +97,7 @@ export const PhLevelAnalytics = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {formattedData.length === 0 && <p>No data available...</p>}
         <ResponsiveContainer width="100%" height={410}>
           <LineChart
             width={700}

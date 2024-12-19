@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/table"
 import { AnomaliesType } from "@/types/common"
 import { GetAllAnomalousService } from "@/services/parameter"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useSuspenseQuery, useQueryClient } from "@tanstack/react-query"
 import Moment from "react-moment"
 import { LoadingSpinner } from "@/app/loading"
 import {
@@ -194,7 +194,7 @@ export function DataTable() {
     data,
     isLoading,
     error
-  } = useQuery<AnomaliesType[]>({
+  } = useSuspenseQuery<AnomaliesType[]>({
     queryKey: ['all_anomalies'],
     queryFn: GetAllAnomalousService.getAnomalous,
     refetchInterval: 60 * 1000,

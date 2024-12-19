@@ -62,8 +62,8 @@ export const ParameterTrends = () => {
   }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-bg p-4 shadow-md rounded-md">
-          <p>{`Date: ${label}`}</p>
+        <div className="bg-gray p-6 shadow-md rounded-md text-sm">
+          <p>{`Time Stamp: ${label}`}</p>
           <p>{`Water Temperature: ${payload[0].value} °C`}</p>
           <p>{`PH Level: ${payload[1].value}`}</p>
           <p>{`Dissolved Oxygen: ${payload[2].value} mg/L`}</p>
@@ -96,7 +96,7 @@ export const ParameterTrends = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {formattedData.length === 0 && <p>No data available</p>}
+        {formattedData.length === 0 && <p>No data available...</p>}
         <ResponsiveContainer width="100%" height={410}>
           <LineChart
             width={700}
