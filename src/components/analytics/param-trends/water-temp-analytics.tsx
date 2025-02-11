@@ -39,7 +39,7 @@ export const WaterTempAnalytics = ({
   } = useQuery<ParameterType[]>({
     queryKey: ['parameters', range],
     queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
-    refetchInterval: 60 * 1000,
+    refetchInterval: 60 * 5000,
   });
   // 15 minutes interval
   // 15 * 60 * 1000,
@@ -114,7 +114,7 @@ export const WaterTempAnalytics = ({
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />
-            <Line type="bumpX" dataKey="water_temperature" stroke="#48cae4" activeDot={{ r: 8 }} />
+            <Line type="bumpX" dataKey="temp" stroke="#48cae4" activeDot={{ r: 8 }} />
           </LineChart>
         </ResponsiveContainer>
       </CardContent>

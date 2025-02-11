@@ -112,7 +112,7 @@ export const PhLevelAnalytics = ({
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />
-            <Line type="monotone" dataKey="ph_level" stroke="#fb8500" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="ph" stroke="#fb8500" activeDot={{ r: 8 }} />
           </LineChart>
         </ResponsiveContainer>
       </CardContent>

@@ -1,7 +1,7 @@
 export type ParameterType = {
-  water_temperature: Float32Array;
-  dissolved_oxygen: Float32Array;
-  ph_level: Float32Array;
+  temp: Float32Array;
+  do: Float32Array;
+  ph: Float32Array;
   created_at: string;
   updated_at: string;
   is_Normal: boolean;

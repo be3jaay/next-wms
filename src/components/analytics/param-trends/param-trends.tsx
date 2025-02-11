@@ -38,7 +38,8 @@ export const ParameterTrends = () => {
   } = useQuery<ParameterType[]>({
     queryKey: ['parameters', range],
     queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
-    refetchInterval: 60 * 1000,
+    refetchInterval: 60 * 5000,
+
   });
 
   if (isLoading) return <SkeletonBox />
@@ -47,7 +48,6 @@ export const ParameterTrends = () => {
 
   const formattedData = data?.map(item => ({
     ...item,
-    created_at: moment(item.created_at).format('"MMMM Do, YYYY hh:mm:ss a"')
   })) || [];
 
   const handleRangeChange = (value: string) => {
@@ -111,9 +111,9 @@ export const ParameterTrends = () => {
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />
-            <Line type="monotone" dataKey="water_temperature" stroke="#48cae4" activeDot={{ r: 8 }} />
-            <Line type="monotone" dataKey="ph_level" stroke="#fb8500" />
-            <Line type="monotone" dataKey="dissolved_oxygen" stroke="#06d6a0" />
+            <Line type="monotone" dataKey="temp" stroke="#48cae4" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="ph" stroke="#fb8500" />
+            <Line type="monotone" dataKey="do" stroke="#06d6a0" />
           </LineChart>
         </ResponsiveContainer>
       </CardContent>

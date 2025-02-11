@@ -39,7 +39,7 @@ export const DissolvedOxygenAnalytics = ({
   } = useQuery<ParameterType[]>({
     queryKey: ['parameters', range],
     queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
-    refetchInterval: 60 * 1000,
+    refetchInterval: 60 * 5000,
   });
 
   if (isLoading) return <SkeletonBox />
@@ -111,7 +111,7 @@ export const DissolvedOxygenAnalytics = ({
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />
-            <Line type="monotone" dataKey="dissolved_oxygen" stroke="#06d6a0" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="do" stroke="#06d6a0" activeDot={{ r: 8 }} />
           </LineChart>
         </ResponsiveContainer>
       </CardContent>

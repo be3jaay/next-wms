@@ -23,32 +23,26 @@ export const DissolvedOxygen: React.FC<Props> = ({ data, isLoading, error }) => 
 
   if (error) return <p>Error: {error.message}</p>
 
-  const dissolvedVal = typeof data?.dissolved_oxygen === 'number'
-    ? data.dissolved_oxygen
-    : 0.00
+  // Use 'do' from the response
+  const dissolvedVal = typeof data?.do === 'number' ? data.do : 0.00
 
   const isNormal = dissolvedVal >= 6 && dissolvedVal <= 9
 
+  // Handle 'created_at' if null
+  const createdAt = data?.created_at ? (
+    <Moment format="MMMM Do, YYYY hh:mm:ss a">{data.created_at}</Moment>
+  ) : (
+    <span>No timestamp available</span>
+  );
+
   return (
-    <Card className={`${isNormal
-      ? ""
-      : "border border-red text-red"}`
-    }>
+    <Card className={`${isNormal ? "" : "border border-red text-red"}`}>
       <CardHeader>
         <CardTitle>
-          <div className={`${isNormal
-            ? ""
-            : " text-red"}
-           flex items-center w-full justify-between`
-          }>
-            <div className='flex items-center gap-2'
-            >
+          <div className={`${isNormal ? "" : " text-red"} flex items-center w-full justify-between`}>
+            <div className='flex items-center gap-2'>
               Dissolved Oxygen
-              <p className={`${isNormal
-                ? "text-slate"
-                : " text-red"} 
-              text-sm `
-              }>
+              <p className={`${isNormal ? "text-slate" : " text-red"} text-sm`}>
                 (Optimal range: 6 - 9 mg/L)
               </p>
             </div>
@@ -57,20 +51,14 @@ export const DissolvedOxygen: React.FC<Props> = ({ data, isLoading, error }) => 
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p>{data?.dissolved_oxygen}</p>
+        <p>{data?.do}</p>
       </CardContent>
       <CardFooter>
-        <div className={`${isNormal
-          ? "text-slate"
-          : " text-red"} 
-          flex items-center justify-between w-full `}
-        >
-          <p>
-            {isNormal ? "Normal" : "Abnormal"}
-          </p>
-          <Moment format="MMMM Do, YYYY hh:mm:ss a">{data?.created_at}</Moment>
+        <div className={`${isNormal ? "text-slate" : " text-red"} flex items-center justify-between w-full`}>
+          <p>{isNormal ? "Normal" : "Abnormal"}</p>
+          {createdAt}
         </div>
       </CardFooter>
-    </Card >
+    </Card>
   )
 }
