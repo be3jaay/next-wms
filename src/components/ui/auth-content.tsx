@@ -22,7 +22,7 @@ export default function AuthContent() {
   } = useQuery<ParameterType>({
     queryKey: ['current_parameter'],
     queryFn: CurrentParameterService.getCurrentParameter,
-    refetchInterval: 60 * 1000,
+    refetchInterval: 60 * 5000,
   });
 
   return (

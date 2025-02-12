@@ -8,7 +8,7 @@ import {
 } from "../../ui/card"
 import { ParameterType } from "@/types/common";
 import { SkeletonCard } from "@/components/ui";
-import Moment from "react-moment";
+import moment from "moment";
 
 type Props = {
   data?: ParameterType
@@ -33,7 +33,7 @@ export const WaterTemp: React.FC<Props> = ({
 
   // Handle the case where 'created_at' is null
   const createdAt = data?.created_at ? (
-    <Moment format="MMMM Do, YYYY hh:mm:ss a ">{data.created_at}</Moment>
+    <span>{moment(data?.created_at).format("MMMM Do, YYYY hh:mm:ss a")}</span>
   ) : (
     <span>No timestamp available</span>
   );

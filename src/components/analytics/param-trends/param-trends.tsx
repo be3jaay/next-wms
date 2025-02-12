@@ -48,6 +48,7 @@ export const ParameterTrends = () => {
 
   const formattedData = data?.map(item => ({
     ...item,
+    created_at: moment(item.created_at).format('"MMMM Do, YYYY hh:mm:ss a"')
   })) || [];
 
   const handleRangeChange = (value: string) => {

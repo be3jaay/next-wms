@@ -39,7 +39,7 @@ export const PhLevelAnalytics = ({
   } = useQuery<ParameterType[]>({
     queryKey: ['parameters', range],
     queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
-    refetchInterval: 60 * 1000,
+    refetchInterval: 60 * 5000,
   });
 
 
