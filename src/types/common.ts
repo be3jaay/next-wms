@@ -6,13 +6,14 @@ export type ParameterType = {
   updated_at: string;
   is_Normal: boolean;
   id: number;
-}
+  timestamp: string;
+};
 
 export type ParameterProps = {
   data?: ParameterType;
   isLoading: boolean;
   error: Error | null;
-}
+};
 
 export type AnomaliesType = {
   id: number;
@@ -22,4 +23,4 @@ export type AnomaliesType = {
   suggestion: string;
   created_at: string;
   updated_at: string;
-}
+};

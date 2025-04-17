@@ -37,8 +37,6 @@ export const ParameterTrends = () => {
   } = useQuery<ParameterType[]>({
     queryKey: ['parameters', range],
     queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
-    refetchInterval: 60 * 5000,
-
   });
 
   if (isLoading) return <SkeletonBox />
@@ -106,7 +104,7 @@ export const ParameterTrends = () => {
               bottom: 5,
             }}
           >
-            <XAxis dataKey='created_at' />
+            <XAxis dataKey='timestamp' />
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />

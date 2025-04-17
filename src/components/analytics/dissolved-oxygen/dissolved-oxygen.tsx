@@ -23,14 +23,12 @@ export const DissolvedOxygen: React.FC<Props> = ({ data, isLoading, error }) => 
 
   if (error) return <p>Error: {error.message}</p>
 
-  // Use 'do' from the response
   const dissolvedVal = typeof data?.do === 'number' ? data.do : 0.00
 
   const isNormal = dissolvedVal >= 6 && dissolvedVal <= 9
 
-  // Handle 'created_at' if null
   const createdAt = data?.created_at ? (
-    <Moment format="MMMM Do, YYYY hh:mm:ss a">{data.created_at}</Moment>
+    <Moment format="YYYY-MM-DD HH:mm:ss">{data.timestamp}</Moment>
   ) : (
     <span>No timestamp available</span>
   );

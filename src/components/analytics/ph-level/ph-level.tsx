@@ -26,14 +26,12 @@ export const PHLevel: React.FC<Props> = ({
 
   if (error) return <p>Error: {error.message}</p>
 
-  // Using 'ph' from the response
   const pHLevel = typeof data?.ph === 'number' ? data.ph : 0.00
 
   const isNormal = pHLevel >= 6.5 && pHLevel <= 8.5
 
-  // Handle 'created_at' if null
   const createdAt = data?.created_at ? (
-    <Moment format="MMMM Do, YYYY hh:mm:ss a ">{data.created_at}</Moment>
+    <Moment format="YYYY-MM-DD HH:mm:ss">{data.timestamp}</Moment>
   ) : (
     <span>No timestamp available</span>
   );

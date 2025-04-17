@@ -26,14 +26,12 @@ export const WaterTemp: React.FC<Props> = ({
 
   if (error) return <p>Error: {error.message}</p>
 
-  // Use 'temp' from the API response for the water temperature
   const waterTemp = typeof data?.temp === 'number' ? data.temp : 0.00
 
   const isNormal = waterTemp >= 22 && waterTemp <= 28
 
-  // Handle the case where 'created_at' is null
-  const createdAt = data?.created_at ? (
-    <Moment format="MMMM Do, YYYY hh:mm:ss a ">{data.created_at}</Moment>
+  const createdAt = data?.timestamp ? (
+    <Moment format="YYYY-MM-DD HH:mm:ss">{data.timestamp}</Moment>
   ) : (
     <span>No timestamp available</span>
   );

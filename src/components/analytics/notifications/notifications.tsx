@@ -39,7 +39,6 @@ export const Notifications = () => {
   } = useQuery<AnomaliesType[]>({
     queryKey: ['show_daily_notification'],
     queryFn: GetAllAnomalousService.getDailyNotification,
-    refetchInterval: 60 * 5000,
   });
 
   const mutation = useMutation({

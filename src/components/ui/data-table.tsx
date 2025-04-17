@@ -197,7 +197,6 @@ export function DataTable() {
   } = useSuspenseQuery<AnomaliesType[]>({
     queryKey: ['all_anomalies'],
     queryFn: GetAllAnomalousService.getAnomalous,
-    refetchInterval: 60 * 1000,
   });
 
   const deleteAllAnomaly = useMutation({

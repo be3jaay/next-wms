@@ -39,13 +39,12 @@ export const PhLevelAnalytics = ({
   } = useQuery<ParameterType[]>({
     queryKey: ['parameters', range],
     queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
-    refetchInterval: 60 * 1000,
   });
 
 
   const formattedData = data?.map(item => ({
     ...item,
-    created_at: moment(item.created_at).format('"MMMM Do, YYYY hh:mm:ss a"')
+    created_at: moment(item.timestamp).format('"YYYY-MM-DD HH:mm:ss"')
   })) || [];
 
   if (isLoading) return <SkeletonBox />
@@ -108,7 +107,7 @@ export const PhLevelAnalytics = ({
               bottom: 5,
             }}
           >
-            <XAxis dataKey='created_at' />
+            <XAxis dataKey='timestamp' />
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />

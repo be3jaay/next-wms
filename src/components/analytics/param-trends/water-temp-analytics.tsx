@@ -39,14 +39,11 @@ export const WaterTempAnalytics = ({
   } = useQuery<ParameterType[]>({
     queryKey: ['parameters', range],
     queryFn: () => ParameterTrendingService.GetParametersReadingRange(range),
-    refetchInterval: 60 * 5000,
   });
-  // 15 minutes interval
-  // 15 * 60 * 1000,
 
   const formattedData = data?.map(item => ({
     ...item,
-    created_at: moment(item.created_at).format('"MMMM Do, YYYY hh:mm:ss a"')
+    created_at: moment(item.timestamp).format('"YYYY-MM-DD HH:mm:ss"')
   })) || [];
 
 
