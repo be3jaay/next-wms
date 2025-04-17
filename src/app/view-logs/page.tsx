@@ -13,7 +13,7 @@ export default function ViewLogs() {
   }
 
   return (
-    <div className="bg-background w-full h-screen">
+    <div className="bg-background w-full h-[140vh]">
       <AuthHeader />
       <div className="mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 ">
         <div className="w-full flex items-start -mt-4 mb-6">
