@@ -26,6 +26,7 @@ import {
 import { ParameterType } from '@/types/common';
 import { useQuery } from '@tanstack/react-query';
 import { ParameterTrendingService } from '@/services/parameter';
+import moment from 'moment';
 
 export const ParameterTrends = () => {
   const [range, setRange] = useState<string>('daily');
@@ -45,6 +46,7 @@ export const ParameterTrends = () => {
 
   const formattedData = data?.map(item => ({
     ...item,
+    created_at: moment(item.created_at).format('"YYYY-MM-DD h:mm a"')
   })) || [];
 
   const handleRangeChange = (value: string) => {
@@ -104,7 +106,7 @@ export const ParameterTrends = () => {
               bottom: 5,
             }}
           >
-            <XAxis dataKey='timestamp' />
+            <XAxis dataKey='created_at' />
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />

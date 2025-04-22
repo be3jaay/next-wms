@@ -29,9 +29,8 @@ export const WaterTemp: React.FC<Props> = ({
   const waterTemp = typeof data?.temp === 'number' ? data.temp : 0.00
 
   const isNormal = waterTemp >= 22 && waterTemp <= 28
-
-  const createdAt = data?.timestamp ? (
-    <Moment format="YYYY-MM-DD HH:mm:ss">{data.timestamp}</Moment>
+  const createdAt = data?.created_at ? (
+    <Moment format="YYYY-MM-DD h:mm a">{data.created_at}</Moment>
   ) : (
     <span>No timestamp available</span>
   );

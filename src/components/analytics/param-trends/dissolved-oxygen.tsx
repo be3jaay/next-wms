@@ -51,7 +51,7 @@ export const DissolvedOxygenAnalytics = ({
 
   const formattedData = data?.map(item => ({
     ...item,
-    created_at: moment(item.timestamp).format('"YYYY-MM-DD HH:mm:ss"')
+    created_at: moment(item.created_at).format('"YYYY-MM-DD h:mm a"')
   })) || [];
 
   const CustomToolTip = ({ active, payload, label }: {
@@ -106,7 +106,7 @@ export const DissolvedOxygenAnalytics = ({
               bottom: 5,
             }}
           >
-            <XAxis dataKey="timestamp" />
+            <XAxis dataKey="created_at" />
             <YAxis />
             <Tooltip content={<CustomToolTip />} />
             <Legend />

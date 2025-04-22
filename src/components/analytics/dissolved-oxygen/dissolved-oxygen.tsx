@@ -27,11 +27,12 @@ export const DissolvedOxygen: React.FC<Props> = ({ data, isLoading, error }) => 
 
   const isNormal = dissolvedVal >= 6 && dissolvedVal <= 9
 
-  const createdAt = data?.timestamp ? (
-    <Moment format="YYYY-MM-DD HH:mm:ss">{data.timestamp}</Moment>
+  const createdAt = data?.created_at ? (
+    <Moment format="YYYY-MM-DD h:mm a">{data.created_at}</Moment>
   ) : (
     <span>No timestamp available</span>
   );
+
 
   return (
     <Card className={`${isNormal ? "" : "border border-red text-red"}`}>
